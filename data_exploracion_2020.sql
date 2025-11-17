@@ -79,6 +79,8 @@ CREATE OR REPLACE TABLE `airy-runway-450418-q9.warehouse.egresosnor_2020`
             WHEN 48 THEN 'Urología'
             WHEN 49 THEN 'Obstetricia'
             WHEN 50 THEN 'Otra'
+            WHEN 51 THEN 'NO ESPECIFICADO'
+            WHEN 52 THEN 'NO ESPECIFICADO'
             ELSE NULL
         END) AS espegre,
    
@@ -151,62 +153,94 @@ CREATE OR REPLACE TABLE `airy-runway-450418-q9.warehouse.egresosnor_2020`
          AND fecha_egr IS NOT NULL
         AND cau_cie10 IS NOT NULL
         AND con_egrpa IS NOT NULL
-        AND esp_egrpa IS NOT NULL
         AND SAFE_CAST(sector AS INT64) IN (1, 2, 3);
 
 
 
 --EXPLORACION DE CIE 10 RELACIONADOS CON VIOLENCIA 2020
 SELECT
-DISTINCT(cau_cie10)
+DISTINCT(cie10_codigo)
 FROM
-warehouse.egresos_2020
+warehouse.egresosnor_2020
 WHERE
-cau_cie10 LIKE 'T74%' OR -- Síndromes de maltrato
-cau_cie10 LIKE 'Y04%' OR -- Agresión con fuerza corporal
-cau_cie10 LIKE 'Y07%' OR -- Otros síndromes de maltrato (especifica el perpetrador)
-cau_cie10 LIKE 'W50%'    -- Aporreo, golpe, mordedura, patada, etc., infligidos por otra persona
+cie10_codigo LIKE 'T74%' OR -- Síndromes de maltrato
+cie10_codigo LIKE 'Y04%' OR -- Agresión con fuerza corporal
+cie10_codigo LIKE 'Y07%' OR -- Otros síndromes de maltrato (especifica el perpetrador)
+cie10_codigo LIKE 'W50%'    -- Aporreo, golpe, mordedura, patada, etc., infligidos por otra persona
 ;
 
 
 --SELECCION DE CASOS POR CIE 10 MAS FRECUENTE 2020
 SELECT
-cau_cie10,
+cie10_codigo,
 sexo,
 COUNT(*) AS numero_de_casos,
-ROUND(AVG(dia_estad), 2) AS estancia_promedio
+ROUND(AVG(edad_en_dias / 365.25),2) AS edad_promedio_anios,
+ROUND(AVG(dias_estancia), 2) AS estancia_promedio,
+AVG(CASE WHEN con_egrpa LIKE 'Fallecido%' THEN 1.0 ELSE 0.0 END) AS tasa_mortalidad
 FROM
-warehouse.egresos_2020
+warehouse.egresosnor_2020
 WHERE
-cau_cie10 LIKE 'T74%' -- Síndromes de maltrato
+cie10_codigo LIKE 'T74%' -- Síndromes de maltrato
 GROUP BY
-cau_cie10,
+cie10_codigo,
 sexo
-ORDER BY numero_de_casos DESC, cau_cie10 ASC;
+ORDER BY numero_de_casos DESC, cie10_codigo ASC;
 
 
--- ENFOQUE SOLO EN CIE 10 ABUSO POR PROVINCIA 2020
+-- ENFOQUE SOLO EN CIE 10 T742 POR PROVINCIA 2020
 SELECT
 prov_res,
 COUNT(*) AS numero_de_casos,
-ROUND(AVG(dia_estad), 2) AS estancia_promedio,
+ROUND(AVG(dias_estancia), 2) AS estancia_promedio,
+ROUND(AVG(edad_en_dias / 365.25),2) AS edad_promedio_anios
 FROM
-warehouse.egresos_2020
+warehouse.egresosnor_2020
 WHERE
-cau_cie10 LIKE 'T74%' 
+cie10_codigo = 'T742' 
 GROUP BY
 prov_res
 ORDER BY numero_de_casos DESC, prov_res;
 
 
+--TOP 3 PROVINCIAS - EXPLORACION DE DATOS 2020
+
+SELECT
+CASE
+WHEN (edad_en_dias / 365.25) < 5 THEN '0-4 años'
+WHEN (edad_en_dias / 365.25) >= 5 AND (edad_en_dias / 365.25) < 10 THEN '5-9 años'
+WHEN (edad_en_dias / 365.25) >= 10 AND (edad_en_dias / 365.25) < 15 THEN '10-14 años'
+WHEN (edad_en_dias / 365.25) >= 15 AND (edad_en_dias / 365.25) < 20 THEN '15-19 años'
+ELSE '20+ años'
+END AS grupo_edad,
+sexo,
+prov_res,
+COUNT(*) AS numero_de_casos,
+ROUND(AVG(dias_estancia), 2) AS estancia_promedio
+FROM
+warehouse.egresosnor_2020
+WHERE
+cie10_codigo = 'T742' AND prov_res IN ('Pastaza', 'Morona Santiago', 'Guayas')
+GROUP BY
+grupo_edad,
+sexo,
+prov_res
+ORDER BY
+prov_res,
+sexo,
+grupo_edad;
+
+
 --EXPLORACION DE CASOS DE ABUSOS POR MES 2020
 SELECT
-mes_ingr AS mes_ingreso,
+EXTRACT(MONTH FROM fecha_ingr_dt) AS mes_ingreso,
 COUNT(*) AS numero_de_casos,
+ROUND(AVG(edad_en_dias / 365.25), 2) AS edad_promedio_anios,
+ROUND(AVG(dias_estancia), 2) AS estancia_promedio
 FROM
-warehouse.egresos_2020
+warehouse.egresosnor_2020
 WHERE
-cau_cie10 LIKE 'T74%' -- Casos de Abuso Sexual
+cie10_codigo = 'T742' -- Casos de Abuso Sexual
 GROUP BY
 mes_ingreso
 ORDER BY
