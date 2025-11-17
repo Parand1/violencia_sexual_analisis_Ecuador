@@ -1,6 +1,6 @@
---CREACION DE TABLA DE EGRESOS NORMALIZADA 2023
+--CREACION DE TABLA DE EGRESOS NORMALIZADA 2021
 
-CREATE OR REPLACE TABLE `airy-runway-450418-q9.warehouse.egresosnor_2023`
+CREATE OR REPLACE TABLE `airy-runway-450418-q9.warehouse.egresosnor_2021`
      PARTITION BY fecha_egr_dt
      CLUSTER BY sector_normalizado, cie10_codigo
      AS
@@ -13,8 +13,8 @@ CREATE OR REPLACE TABLE `airy-runway-450418-q9.warehouse.egresosnor_2023`
         ELSE NULL
       END AS edad_en_dias,
    
-      -- 2. ENRIQUECIMIENTO: Extracción del código CIE-10 puro
-      SPLIT(cau_cie10, ' ')[OFFSET(0)] AS cie10_codigo,
+      -- 2. ENRIQUECIMIENTO: NO SE PUEDE EXTRAER CIE 10 PURO, SE DEBE FLILTRAR POR DESCRIPCION CIE 10
+      cau_cie10 AS cie10_codigo,
    
       -- 3. LIMPIEZA: Normalización del Sector (CORREGIDO)
       CASE
@@ -43,7 +43,7 @@ CREATE OR REPLACE TABLE `airy-runway-450418-q9.warehouse.egresosnor_2023`
 
    
     FROM
-      `airy-runway-450418-q9.warehouse.egresos_2023`
+      `airy-runway-450418-q9.warehouse.egresos_2021`
     WHERE
       -- Filtro de calidad de datos (CORREGIDO)
       SAFE_CAST(dia_estad AS INT64) >= 0
@@ -52,19 +52,20 @@ CREATE OR REPLACE TABLE `airy-runway-450418-q9.warehouse.egresosnor_2023`
       AND con_egrpa IS NOT NULL
       AND sector IN ('Público', 'Privado con fines de lucro', 'Privado sin fines de lucro');
 
---EXPLORACION DE CIE 10 RELACIONADOS CON VIOLENCIA 2023
+
+--EXPLORACION DE CIE 10 RELACIONADOS CON VIOLENCIA 2021
 SELECT
-DISTINCT(cie10_codigo)
+DISTINCT(cie10_codigo),
 FROM
-warehouse.egresosnor_2023
+warehouse.egresosnor_2021
 WHERE
-cie10_codigo LIKE 'T74%' OR -- Síndromes de maltrato
-cie10_codigo LIKE 'Y04%' OR -- Agresión con fuerza corporal
-cie10_codigo LIKE 'Y07%' OR -- Otros síndromes de maltrato (especifica el perpetrador)
-cie10_codigo LIKE 'W50%'    -- Aporreo, golpe, mordedura, patada, etc., infligidos por otra persona
+cau_cie10 LIKE 'Abuso sexual' OR
+cau_cie10 LIKE 'Abuso de sustancias que no producen dependencia'OR
+cau_cie10 LIKE 'Abuso físico'
 ;
 
---SELECCION DE CASOS POR CIE 10 MAS FRECUENTE 2023
+
+--SELECCION DE CASOS POR DESCRIPCION DE CIE 10 MAS FRECUENTE 2021
 SELECT
 cie10_codigo,
 sexo,
@@ -73,44 +74,33 @@ ROUND(AVG(edad_en_dias / 365.25),2) AS edad_promedio_anios,
 ROUND(AVG(dias_estancia), 2) AS estancia_promedio,
 AVG(CASE WHEN con_egrpa LIKE 'Fallecido%' THEN 1.0 ELSE 0.0 END) AS tasa_mortalidad
 FROM
-warehouse.egresosnor_2023
+warehouse.egresosnor_2021
 WHERE
-cie10_codigo LIKE 'T74%' -- Síndromes de maltrato
+cau_cie10 LIKE 'Abuso sexual' OR
+cau_cie10 LIKE 'Abuso de sustancias que no producen dependencia'OR
+cau_cie10 LIKE 'Abuso físico'
 GROUP BY
-cie10_codigo,
+cau_cie10,
 sexo
-ORDER BY numero_de_casos DESC, cie10_codigo ASC;
+ORDER BY numero_de_casos DESC, cau_cie10 ASC;
 
--- ENFOQUE SOLO EN CIE 10 T742 POR PROVINCIA 2023
+
+-- ENFOQUE SOLO EN CIE 10 ABUSO SEXUAL POR PROVINCIA 2021
 SELECT
 prov_res,
 COUNT(*) AS numero_de_casos,
 ROUND(AVG(dias_estancia), 2) AS estancia_promedio,
 ROUND(AVG(edad_en_dias / 365.25),2) AS edad_promedio_anios
 FROM
-warehouse.egresosnor_2023
+warehouse.egresosnor_2021
 WHERE
-cie10_codigo = 'T742' 
+cau_cie10 LIKE 'Abuso sexual' 
 GROUP BY
 prov_res
 ORDER BY numero_de_casos DESC, prov_res;
 
--- ENFOQUE SOLO EN CIE 10 T742 POR PROVINCIA Y SEXO 2023
-SELECT
-prov_res,
-sexo,
-COUNT(*) AS numero_de_casos,
-ROUND(AVG(dias_estancia), 2) AS estancia_promedio,
-ROUND(AVG(edad_en_dias / 365.25),2) AS edad_promedio_anios
-FROM
-warehouse.egresosnor_2023
-WHERE
-cie10_codigo = 'T742' 
-GROUP BY
-prov_res, sexo
-ORDER BY numero_de_casos DESC, prov_res;
 
---TOP 3 PROVINCIAS - EXPLORACION DE DATOS 2023
+--TOP 3 PROVINCIAS - EXPLORACION DE DATOS 2021
 
 SELECT
 CASE
@@ -125,9 +115,9 @@ prov_res,
 COUNT(*) AS numero_de_casos,
 ROUND(AVG(dias_estancia), 2) AS estancia_promedio
 FROM
-warehouse.egresosnor_2023
+warehouse.egresosnor_2021
 WHERE
-cie10_codigo = 'T742' AND prov_res IN ('Tungurahua', 'Morona Santiago', 'Guayas')
+cau_cie10 = 'Abuso sexual' AND prov_res IN ('Azuay', 'Morona Santiago', 'Guayas')
 GROUP BY
 grupo_edad,
 sexo,
@@ -138,20 +128,18 @@ sexo,
 grupo_edad;
 
 
---EXPLORACION DE CASOS DE ABUSOS POR MES 2023
+--EXPLORACION DE CASOS DE ABUSOS POR MES 2021
 SELECT
 EXTRACT(MONTH FROM fecha_ingr_dt) AS mes_ingreso,
 COUNT(*) AS numero_de_casos,
 ROUND(AVG(edad_en_dias / 365.25), 2) AS edad_promedio_anios,
 ROUND(AVG(dias_estancia), 2) AS estancia_promedio
 FROM
-warehouse.egresosnor_2023
+warehouse.egresosnor_2021
 WHERE
-cie10_codigo = 'T742' -- Casos de Abuso Sexual
+cau_cie10 = 'Abuso sexual' -- Casos de Abuso Sexual
 GROUP BY
 mes_ingreso
 ORDER BY
 mes_ingreso;
-
-
 
