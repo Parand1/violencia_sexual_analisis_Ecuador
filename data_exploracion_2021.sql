@@ -80,9 +80,9 @@ cau_cie10 LIKE 'Abuso sexual' OR
 cau_cie10 LIKE 'Abuso de sustancias que no producen dependencia'OR
 cau_cie10 LIKE 'Abuso físico'
 GROUP BY
-cau_cie10,
+cie10_codigo,
 sexo
-ORDER BY numero_de_casos DESC, cau_cie10 ASC;
+ORDER BY numero_de_casos DESC, cie10_codigo ASC;
 
 
 -- ENFOQUE SOLO EN CIE 10 ABUSO SEXUAL POR PROVINCIA 2021
