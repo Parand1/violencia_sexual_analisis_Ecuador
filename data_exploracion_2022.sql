@@ -39,7 +39,8 @@ CREATE OR REPLACE TABLE `airy-runway-450418-q9.warehouse.egresosnor_2022`
       prov_res,
       con_egrpa,
       cau_cie10,
-      sector -- Mantenemos el sector original para verificación
+      sector,
+      area_res
 
    
     FROM

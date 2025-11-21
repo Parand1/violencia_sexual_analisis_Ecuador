@@ -139,6 +139,13 @@ CREATE OR REPLACE TABLE `airy-runway-450418-q9.warehouse.egresosnor_2020`
              WHEN 3 THEN 'Fallecido en 48 horas y más'
              ELSE NULL
          END AS con_egrpa,
+
+         CASE SAFE_CAST(area_res AS INT64)
+             WHEN 1 THEN 'Urbana'
+             WHEN 2 THEN 'Rural'
+             ELSE NULL
+         END AS area_res,
+         
     
          cau_cie10, -- Se mantiene la causa original para referencia
     

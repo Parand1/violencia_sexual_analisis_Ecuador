@@ -32,7 +32,7 @@ SELECT
         anio;
 
 
- -- Consulta OPTIMIZADA para obtener el conteo de casos T74.2 en mujeres por grupo de edad (2019-2024)
+ -- CONTEO DE CASOS T742 en mujeres por grupo de edad (2019-2024)
 WITH datos_filtrados AS (
 -- Unificar datos de todos los años, filtrando desde el inicio para eficiencia
 SELECT edad_en_dias FROM `airy-runway-450418-q9.warehouse.egresosnor_2019` WHERE cie10_codigo = 'T742'
@@ -103,6 +103,75 @@ sexo
 ORDER BY
 anio,
 sexo;
+
+
+-- CONTEO DE CASOS DE ABSUO SEXUAL POR ETNIA Y SEXO MUJER 2019 A 2024
+
+ WITH datos_filtrados AS (
+-- Unificar datos de todos los años, filtrando por T742 para eficiencia
+SELECT 2019 AS anio, etnia, sexo FROM `airy-runway-450418-q9.warehouse.egresosnor_2019` WHERE cie10_codigo = 'T742'
+UNION ALL
+SELECT 2020 AS anio, etnia, sexo FROM `airy-runway-450418-q9.warehouse.egresosnor_2020` WHERE cie10_codigo = 'T742'
+UNION ALL
+SELECT 2021 AS anio, etnia, sexo FROM `airy-runway-450418-q9.warehouse.egresosnor_2021` WHERE cie10_codigo = 'Abuso sexual'
+UNION ALL
+SELECT 2022 AS anio, etnia, sexo FROM `airy-runway-450418-q9.warehouse.egresosnor_2022` WHERE cie10_codigo = 'T742'
+UNION ALL
+SELECT 2023 AS anio, etnia, sexo FROM `airy-runway-450418-q9.warehouse.egresosnor_2023` WHERE cie10_codigo = 'T742'
+UNION ALL
+SELECT 2024 AS anio, etnia, sexo FROM `airy-runway-450418-q9.warehouse.egresosnor` WHERE cie10_codigo = 'T742'
+ )
+ -- Agrupar por año y etnia para obtener el conteo final
+SELECT
+anio,
+etnia,
+COUNT(*) AS numero_de_casos
+FROM
+datos_filtrados
+WHERE TRUE
+AND etnia IS NOT NULL
+AND sexo = 'Mujer'
+GROUP BY
+anio,
+etnia
+ORDER BY
+anio,
+etnia;
+
+
+-- CONTEO DE CASOS DE ABSUO SEXUAL POR AREA DE RESIDENCIA Y SEXO MUJER 2019 A 2024
+
+ WITH datos_filtrados AS (
+-- Unificar datos de todos los años, filtrando por T742 para eficiencia
+SELECT 2019 AS anio, area_res, sexo FROM `airy-runway-450418-q9.warehouse.egresosnor_2019` WHERE cie10_codigo = 'T742'
+UNION ALL
+SELECT 2020 AS anio, area_res, sexo FROM `airy-runway-450418-q9.warehouse.egresosnor_2020` WHERE cie10_codigo = 'T742'
+UNION ALL
+SELECT 2021 AS anio, area_res, sexo FROM `airy-runway-450418-q9.warehouse.egresosnor_2021` WHERE cie10_codigo = 'Abuso sexual'
+UNION ALL
+SELECT 2022 AS anio, area_res, sexo FROM `airy-runway-450418-q9.warehouse.egresosnor_2022` WHERE cie10_codigo = 'T742'
+UNION ALL
+SELECT 2023 AS anio, area_res, sexo FROM `airy-runway-450418-q9.warehouse.egresosnor_2023` WHERE cie10_codigo = 'T742'
+UNION ALL
+SELECT 2024 AS anio, area_res, sexo FROM `airy-runway-450418-q9.warehouse.egresosnor` WHERE cie10_codigo = 'T742'
+ )
+ -- Agrupar por año y etnia para obtener el conteo final
+SELECT
+anio,
+area_res,
+COUNT(*) AS numero_de_casos
+FROM
+datos_filtrados
+WHERE TRUE
+AND area_res IS NOT NULL
+AND sexo = 'Mujer'
+GROUP BY
+anio,
+area_res
+ORDER BY
+anio,
+area_res;
+
 
 
 --DISTRIBUCION DE CASOS DE ABUSO SEXUAL POR MES 2019 A 2024
