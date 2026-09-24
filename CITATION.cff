@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use this research codebase, presentation, or datasets, please cite it as below."
+title: "Rompiendo el silencio estadístico: Descifrando el patrón de violencia sexual contra niñas y adolescentes en Ecuador a través del análisis de datos"
+type: conference-presentation
+authors:
+  - family-names: "Japón Calva"
+    given-names: "Pablo Andrés"
+    orcid: "https://orcid.org/0009-0005-7798-2516"
+conference:
+  name: "I Congreso Intersectorial sobre Violencia de Género y Mujeres en Situación de Vulnerabilidad"
+  location: "Loja, Ecuador"
+  date-start: "2025-12-04"
+  date-end: "2025-12-05"
+date-released: "2025-12-05"
+keywords:
+  - "Violencia de Género"
+  - "Violencia Sexual Infantil"
+  - "Egresos Hospitalarios"
+  - "Ecuador"
+  - "CIE-10 T74"
+  - "Big Data"
+  - "Google BigQuery"
+  - "Regresión Lineal"
+  - "Chi-Cuadrado"
+  - "Salud Pública"
+repository-code: "https://github.com/Parand1/violencia_sexual_analisis_Ecuador"
+license: "CC-BY-4.0"

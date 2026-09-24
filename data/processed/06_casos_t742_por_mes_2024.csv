@@ -1,0 +1,13 @@
+mes_numero,nombre_mes,numero_casos,edad_promedio,estancia_promedio_dias
+1,Enero,29,14.63,3.45
+2,Febrero,21,14.42,4.00
+3,Marzo,34,13.84,4.09
+4,Abril,31,16.86,2.71
+5,Mayo,38,13.54,3.16
+6,Junio,31,14.93,1.68
+7,Julio,28,14.53,3.04
+8,Agosto,28,14.35,2.54
+9,Septiembre,42,14.75,4.17
+10,Octubre,38,14.15,3.11
+11,Noviembre,34,14.17,3.18
+12,Diciembre,34,15.02,3.12
