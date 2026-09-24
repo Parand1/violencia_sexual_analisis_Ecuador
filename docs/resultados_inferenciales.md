@@ -18,7 +18,7 @@ Al consolidar los 6 años del estudio (2019–2024), se identificaron un total d
 | T74.3 | Abuso psicológico | 23 | 1.11% |
 | **Total** | | **2,067** | **100.00%** |
 
-> **Hallazgo Clave:** Casi **8 de cada 10 hospitalizaciones por maltrato** en Ecuador corresponden a abuso sexual. Esto sustentó enfocar las pruebas inferenciales y predictivas en el código **T74.2**.
+El abuso sexual concentra el 78% de los egresos hospitalarios por maltrato en el período, lo que justificó centrar el modelado estadístico en este diagnóstico (código T74.2).
 
 ---
 
@@ -36,7 +36,7 @@ Al consolidar los 6 años del estudio (2019–2024), se identificaron un total d
     *   **Coeficiente de Determinación ($R^2$):** $0.960$ (El $96.0\%$ de la variabilidad observada es explicada por el tiempo).
     *   **Pendiente ($\beta_1$):** $+60.60$ casos anuales adicionales en promedio.
     *   **Intercepto ($\beta_0$):** $-122,285.80$.
-    *   **Significancia ($p$-valor):** $p = 0.0034 < 0.01$ (**Altamente significativo**).
+    *   **Significancia ($p$-valor):** $p = 0.0034$ ($p < 0.01$).
 *   **Ecuación de Regresión:**
     $$\widehat{Y} = 60.600 \times \text{Año} - 122,285.800$$
 
@@ -73,7 +73,7 @@ Al incorporar el año 2019 ($n = 230$), el modelo lineal arroja $R^2 = 0.626$ y 
 *   **Grados de libertad ($gl$):** $4$
 *   **Significancia asintótica ($p$-valor):** $p < 0.0001$ ($1.41 \times 10^{-118}$).
 
-> **Conclusión:** Se rechaza categóricamente la hipótesis nula. El residuo de **$+18.78$** en el segmento de **10 a 14 años** demuestra una hiperconcentración anómala: más de 4 de cada 10 hospitalizaciones ocurren en esta franja etaria.
+**Conclusión:** Se rechaza la hipótesis nula ($p < 0.001$). El residuo estandarizado de $+18.78$ en el grupo de 10 a 14 años confirma una concentración significativamente mayor a la esperada bajo una distribución uniforme (41.92% del total de casos).
 
 ---
 
