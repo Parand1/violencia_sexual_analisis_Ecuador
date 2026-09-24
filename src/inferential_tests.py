@@ -1,11 +1,11 @@
 """
 ======================================================================================
-PROYECTO: Rompiendo el silencio estadístico: Violencia sexual contra niñas y adolescentes en Ecuador
-AUTOR: Pablo Andrés Japón Calva
+PROYECTO: Rompiendo el silencio estadistico: Violencia sexual contra ninas y adolescentes en Ecuador
+AUTOR: Pablo Andres Japon Calva
 SCRIPT: inferential_tests.py
-DESCRIPCIÓN: Validación de las pruebas de hipótesis no paramétricas (Chi-cuadrado):
+DESCRIPCION: Validacion de las pruebas de hipotesis no parametricas (Chi-cuadrado):
              1. Prueba Chi-cuadrado de Bondad de Ajuste: Uniformidad etaria (T74.2 en mujeres).
-             2. Prueba Chi-cuadrado de Independencia: Distribución geográfica Rural vs. Urbana (2019-2024).
+             2. Prueba Chi-cuadrado de Independencia: Distribucion geografica Rural vs. Urbana (2019-2024).
 REPRODUCE: Resultados de SPSS documentados en ANALISIS_INFERENCIAL_VIOLENCIA.md
 ======================================================================================
 """
@@ -28,13 +28,13 @@ plt.rcParams.update({
 
 def run_age_goodness_of_fit():
     print("=" * 70)
-    print("HIPÓTESIS 2: PRUEBA CHI-CUADRADO DE BONDAD DE AJUSTE (GRUPOS DE EDAD)")
+    print("HIPOTESIS 2: PRUEBA CHI-CUADRADO DE BONDAD DE AJUSTE (GRUPOS DE EDAD)")
     print("=" * 70)
-    print("Pregunta: ¿Se distribuyen los casos de abuso sexual (T74.2) uniformemente entre edades?")
+    print("Pregunta: Se distribuyen los casos de abuso sexual (T74.2) uniformemente entre edades?")
     print("H0: Los casos se distribuyen uniformemente entre los 5 grupos de edad.")
-    print("H1: Existen diferencias significativas en la concentración por edad.")
+    print("H1: Existen diferencias significativas en la concentracion por edad.")
 
-    grupos = ["0-4 años", "5-9 años", "10-14 años", "15-19 años", "20+ años"]
+    grupos = ["0-4 anos", "5-9 anos", "10-14 anos", "15-19 anos", "20+ anos"]
     observados = np.array([85, 179, 615, 330, 258])
     total = observados.sum()
     esperados = np.full(len(observados), total / len(observados)) # 293.4
@@ -58,20 +58,20 @@ def run_age_goodness_of_fit():
     print(f"Chi-cuadrado (Chi2): {chi2_stat:.3f}")
     print(f"Grados de libertad (gl): {dof}")
     print(f"P-valor asintotico: {p_val:.4e} (p < 0.001)")
-    print("CONCLUSIÓN: Se rechaza H0 contundentemente. El grupo de 10 a 14 años presenta")
-    print("un residuo de +18.78 (desviación extrema sobre el valor esperado), confirmando")
-    print("que las niñas y adolescentes de 10 a 14 años concentran el foco crítico de vulnerabilidad.")
+    print("CONCLUSION: Se rechaza H0 contundentemente. El grupo de 10 a 14 anos presenta")
+    print("un residuo de +18.78 (desviacion extrema sobre el valor esperado), confirmando")
+    print("que las ninas y adolescentes de 10 a 14 anos concentran el foco critico de vulnerabilidad.")
 
-    # Gráfico de distribución etaria
-    fig_dir = os.path.join(os.path.dirname(__file__), "..", "presentation", "figures")
+    # Grafico de distribucion etaria
+    fig_dir = os.path.join(os.path.dirname(__file__), "..", "figures")
     os.makedirs(fig_dir, exist_ok=True)
     fig_path = os.path.join(fig_dir, "distribucion_etaria_mujeres_chi2.png")
 
     fig, ax = plt.subplots(figsize=(9, 5.5))
     colores = ["#CBD5E0", "#A0AEC0", "#E53E3E", "#F56565", "#718096"]
-    bars = ax.bar(grupos, observados, color=colores, width=0.6, edgecolor="#4A5568", lw=1)
+    bars = ax.bar(["0-4 años", "5-9 años", "10-14 años", "15-19 años", "20+ años"], observados, color=colores, width=0.6, edgecolor="#4A5568", lw=1)
 
-    # Línea de valor esperado bajo H0
+    # Linea de valor esperado bajo H0
     ax.axhline(esperados[0], color="#2B6CB0", linestyle="--", lw=2, label=f"Frecuencia Esperada uniforme (E = {esperados[0]:.1f})")
 
     for bar, val in zip(bars, observados):
@@ -87,14 +87,14 @@ def run_age_goodness_of_fit():
     plt.tight_layout()
     fig.savefig(fig_path, dpi=300)
     plt.close()
-    print(f"[OK] Gráfico de grupos de edad guardado en: {fig_path}")
+    print(f"[OK] Grafico de grupos de edad guardado en: {fig_path}")
 
 def run_rural_urban_independence():
     print("\n" + "=" * 70)
-    print("HIPÓTESIS 3: PRUEBA CHI-CUADRADO DE INDEPENDENCIA (RURAL VS. URBANO)")
+    print("HIPOTESIS 3: PRUEBA CHI-CUADRADO DE INDEPENDENCIA (RURAL VS. URBANO)")
     print("=" * 70)
-    print("Pregunta: ¿Varía la proporción rural/urbana significativamente entre 2019 y 2024?")
-    print("H0: El área de residencia y el año son independientes (proporción estable en el tiempo).")
+    print("Pregunta: Varia la proporcion rural/urbana significativamente entre 2019 y 2024?")
+    print("H0: El area de residencia y el ano son independientes (proporcion estable en el tiempo).")
     print("H1: Existen diferencias temporales significativas en la procedencia territorial.")
 
     anios = [2019, 2020, 2021, 2022, 2023, 2024]
@@ -119,12 +119,12 @@ def run_rural_urban_independence():
     print(f"Chi-cuadrado de Pearson (Chi2): {chi2_stat:.3f}")
     print(f"Grados de libertad (gl): {dof}")
     print(f"Significacion asintotica (p-valor): {p_val:.3f} (p = 0.921 > 0.05: NO SIGNIFICATIVO)")
-    print("CONCLUSIÓN: NO se rechaza H0. La proporción entre ámbito rural (~33.7%) y urbano (~66.3%)")
-    print("se mantiene notablemente constante a través de todos los años analizados, reflejando")
-    print("la estructura demográfica natural de la población ecuatoriana.")
+    print("CONCLUSION: NO se rechaza H0. La proporcion entre ambito rural (~33.7%) y urbano (~66.3%)")
+    print("se mantiene notablemente constante a traves de todos los anos analizados, reflejando")
+    print("la estructura demografica natural de la poblacion ecuatoriana.")
 
-    # Gráfico de barras apiladas porcentuales
-    fig_dir = os.path.join(os.path.dirname(__file__), "..", "presentation", "figures")
+    # Grafico de barras apiladas porcentuales
+    fig_dir = os.path.join(os.path.dirname(__file__), "..", "figures")
     fig_path = os.path.join(fig_dir, "estabilidad_rural_urbana_chi2.png")
 
     fig, ax = plt.subplots(figsize=(9, 5.5))
@@ -149,7 +149,7 @@ def run_rural_urban_independence():
     plt.tight_layout()
     fig.savefig(fig_path, dpi=300)
     plt.close()
-    print(f"[OK] Gráfico rural/urbano guardado en: {fig_path}")
+    print(f"[OK] Grafico rural/urbano guardado en: {fig_path}")
 
 if __name__ == "__main__":
     run_age_goodness_of_fit()

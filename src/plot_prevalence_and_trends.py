@@ -1,10 +1,10 @@
 """
 ======================================================================================
-PROYECTO: Rompiendo el silencio estadístico: Violencia sexual contra niñas y adolescentes en Ecuador
-AUTOR: Pablo Andrés Japón Calva
+PROYECTO: Rompiendo el silencio estadistico: Violencia sexual contra ninas y adolescentes en Ecuador
+AUTOR: Pablo Andres Japon Calva
 SCRIPT: plot_prevalence_and_trends.py
-DESCRIPCIÓN: Genera los gráficos de prevalencia de diagnósticos de maltrato (CIE-10 T74)
-             y la brecha de género hospitalaria con el efecto escalera 2020-2024.
+DESCRIPCION: Genera los graficos de prevalencia de diagnosticos de maltrato (CIE-10 T74)
+             y la brecha de genero hospitalaria con el efecto escalera 2020-2024.
 ======================================================================================
 """
 
@@ -23,11 +23,11 @@ plt.rcParams.update({
     "figure.dpi": 300
 })
 
-fig_dir = os.path.join(os.path.dirname(__file__), "..", "presentation", "figures")
+fig_dir = os.path.join(os.path.dirname(__file__), "..", "figures")
 os.makedirs(fig_dir, exist_ok=True)
 
 # -------------------------------------------------------------
-# 1. GRÁFICO DE PREVALENCIA T74 (78.04% Abuso Sexual)
+# 1. GRAFICO DE PREVALENCIA T74 (78.04% Abuso Sexual)
 # -------------------------------------------------------------
 diagnosticos = [
     "Abuso sexual\n(T74.2)",
@@ -55,10 +55,10 @@ ax.set_xlim(0, 1850)
 plt.tight_layout()
 fig.savefig(os.path.join(fig_dir, "prevalencia_sindromes_maltrato_t74.png"), dpi=300)
 plt.close()
-print("[OK] Gráfico de prevalencia T74 guardado.")
+print("[OK] Grafico de prevalencia T74 guardado.")
 
 # -------------------------------------------------------------
-# 2. GRÁFICO DE BRECHA DE GÉNERO Y EFECTO ESCALERA
+# 2. GRAFICO DE BRECHA DE GENERO Y EFECTO ESCALERA
 # -------------------------------------------------------------
 anios = [2019, 2020, 2021, 2022, 2023, 2024]
 mujeres = [230, 143, 166, 233, 332, 363]
@@ -77,7 +77,7 @@ for bar, val in zip(b1, mujeres):
 for bar, val in zip(b2, hombres):
     ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 8, f"{val}", ha="center", fontsize=9, color="#4A5568")
 
-# Línea de escalera visual en mujeres post-2020
+# Linea de escalera visual en mujeres post-2020
 ax.plot(x[1:] - width/2, mujeres[1:], color="#E53E3E", marker="o", lw=2, linestyle=":", label="Efecto Escalera Ascendente (2020-2024)")
 
 ax.set_title("Evolución de Egresos Hospitalarios por Abuso Sexual (T74.2) por Sexo\nEcuador 2019-2024 (INEC)", pad=15)
@@ -90,4 +90,4 @@ ax.legend(loc="upper left")
 plt.tight_layout()
 fig.savefig(os.path.join(fig_dir, "brecha_genero_escalera_2019_2024.png"), dpi=300)
 plt.close()
-print("[OK] Gráfico de brecha de género guardado.")
+print("[OK] Grafico de brecha de genero guardado.")

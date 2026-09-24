@@ -1,11 +1,11 @@
 """
 ======================================================================================
-PROYECTO: Rompiendo el silencio estadístico: Violencia sexual contra niñas y adolescentes en Ecuador
-AUTOR: Pablo Andrés Japón Calva
+PROYECTO: Rompiendo el silencio estadistico: Violencia sexual contra ninas y adolescentes en Ecuador
+AUTOR: Pablo Andres Japon Calva
 SCRIPT: linear_regression_forecast.py
-DESCRIPCIÓN: Validación del modelo inferencial de Regresión Lineal Simple para
+DESCRIPCION: Validacion del modelo inferencial de Regresion Lineal Simple para
              analizar la tendencia de hospitalizaciones por abuso sexual (CIE-10 T74.2)
-             en mujeres y generar la proyección para el año 2025.
+             en mujeres y generar la proyeccion para el ano 2025.
 REPRODUCE: Resultados de SPSS documentados en ANALISIS_INFERENCIAL_VIOLENCIA.md
 ======================================================================================
 """
@@ -16,9 +16,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import statsmodels.api as sm
-from scipy import stats
 
-# Configuración de estilo visual para gráficos de publicación
+# Configuracion de estilo visual para graficos de publicacion
 sns.set_theme(style="whitegrid", font="sans-serif")
 plt.rcParams.update({
     "font.size": 11,
@@ -41,13 +40,13 @@ def run_regression_analysis():
     df = pd.DataFrame(data)
 
     print("=" * 70)
-    print("ANÁLISIS INFERENCIAL 1: REGRESIÓN LINEAL DE CASOS T74.2 EN MUJERES")
+    print("ANALISIS INFERENCIAL 1: REGRESION LINEAL DE CASOS T74.2 EN MUJERES")
     print("=" * 70)
     print(df.to_string(index=False))
     print("-" * 70)
 
     # -------------------------------------------------------------
-    # 2. MODELO 1: PERÍODO POST-PANDEMIA (2020 - 2024) - MODELO PRINCIPAL
+    # 2. MODELO 1: PERIODO POST-PANDEMIA (2020 - 2024) - MODELO PRINCIPAL
     # -------------------------------------------------------------
     df_post = df[df["anio"] >= 2020].copy()
     X_post = sm.add_constant(df_post["anio"])
@@ -60,7 +59,7 @@ def run_regression_analysis():
     r2_post = model_post.rsquared
     p_val_post = model_post.pvalues["anio"]
 
-    # Proyección para el año 2025
+    # Proyeccion para el ano 2025
     pred_2025 = model_post.get_prediction([1, 2025]).summary_frame(alpha=0.05)
     casos_pred_2025 = pred_2025["mean"].values[0]
     ci_lower = pred_2025["mean_ci_lower"].values[0]
@@ -69,16 +68,16 @@ def run_regression_analysis():
     pi_upper = pred_2025["obs_ci_upper"].values[0]
 
     print("\n>>> MODELO 1.1: TENDENCIA POST-PANDEMIA (2020-2024)")
-    print(f"Ecuación: Casos = ({b1_post:.3f} * Año) + ({b0_post:.3f})")
-    print(f"R² (Coeficiente de determinación): {r2_post:.4f} ({r2_post*100:.1f}% variabilidad explicada)")
-    print(f"Pendiente (Aumento promedio anual): +{b1_post:.2f} casos/año")
+    print(f"Ecuacion: Casos = ({b1_post:.3f} * Ano) + ({b0_post:.3f})")
+    print(f"R2 (Coeficiente de determinacion): {r2_post:.4f} ({r2_post*100:.1f}% variabilidad explicada)")
+    print(f"Pendiente (Aumento promedio anual): +{b1_post:.2f} casos/ano")
     print(f"P-valor (Significancia de la tendencia): {p_val_post:.4f} (p < 0.01: ALTAMENTE SIGNIFICATIVO)")
-    print(f"Predicción para el año 2025: {casos_pred_2025:.1f} casos (~{round(casos_pred_2025)} casos)")
+    print(f"Prediccion para el ano 2025: {casos_pred_2025:.1f} casos (~{round(casos_pred_2025)} casos)")
     print(f"Intervalo de confianza 95% para la media: [{ci_lower:.1f}, {ci_upper:.1f}]")
-    print(f"Intervalo de predicción 95% para la observación: [{pi_lower:.1f}, {pi_upper:.1f}]")
+    print(f"Intervalo de prediccion 95% para la observacion: [{pi_lower:.1f}, {pi_upper:.1f}]")
 
     # -------------------------------------------------------------
-    # 3. MODELO 2: PERÍODO COMPLETO (2019 - 2024) - CONTRASTE METODOLÓGICO
+    # 3. MODELO 2: PERIODO COMPLETO (2019 - 2024) - CONTRASTE METODOLOGICO
     # -------------------------------------------------------------
     X_full = sm.add_constant(df["anio"])
     y_full = df["casos_mujeres"]
@@ -90,35 +89,35 @@ def run_regression_analysis():
     p_val_full = model_full.pvalues["anio"]
 
     print("\n>>> MODELO 1.2: TENDENCIA GENERAL (2019-2024 - Incluye choque estructural de 2020)")
-    print(f"Ecuación: Casos = ({b1_full:.3f} * Año) + ({b0_full:.3f})")
-    print(f"R²: {r2_full:.4f}")
-    print(f"P-valor: {p_val_full:.4f} (p > 0.05: No significativo al 95% debido a la anomalía de 2020)")
+    print(f"Ecuacion: Casos = ({b1_full:.3f} * Ano) + ({b0_full:.3f})")
+    print(f"R2: {r2_full:.4f}")
+    print(f"P-valor: {p_val_full:.4f} (p > 0.05: No significativo al 95% debido a la anomalia de 2020)")
 
     # -------------------------------------------------------------
-    # 4. GENERACIÓN DE GRÁFICO PROFESIONAL
+    # 4. GENERACION DE GRAFICO PROFESIONAL
     # -------------------------------------------------------------
-    fig_dir = os.path.join(os.path.dirname(__file__), "..", "presentation", "figures")
+    fig_dir = os.path.join(os.path.dirname(__file__), "..", "figures")
     os.makedirs(fig_dir, exist_ok=True)
     fig_path = os.path.join(fig_dir, "regresion_lineal_proyeccion_2025.png")
 
     fig, ax = plt.subplots(figsize=(10, 6))
 
-    # Puntos históricos
+    # Puntos historicos
     ax.scatter(df["anio"], df["casos_mujeres"], color="#1A365D", s=90, zorder=5, label="Casos Observados (2019-2024)")
 
-    # Resaltar la caída anómala del 2020 (confinamiento)
+    # Resaltar la caida anomala del 2020 (confinamiento)
     ax.annotate("Caída por confinamiento\nCOVID-19 (Subregistro)", 
                 xy=(2020, 143), xytext=(2019.2, 80),
                 arrowprops=dict(facecolor="#D69E2E", arrowstyle="->", lw=1.5),
                 fontsize=9, fontweight="bold", color="#744210",
                 bbox=dict(boxstyle="round,pad=0.3", fc="#FEFCBF", ec="#D69E2E", lw=1))
 
-    # Línea de regresión 2020-2025
+    # Linea de regresion 2020-2025
     x_vals = np.linspace(2020, 2025, 100)
     y_vals = b1_post * x_vals + b0_post
     ax.plot(x_vals, y_vals, color="#E53E3E", lw=2.5, linestyle="--", label=f"Tendencia Post-Pandemia (R² = {r2_post:.2f}, p = {p_val_post:.3f})")
 
-    # Proyección 2025 punto destacado
+    # Proyeccion 2025 punto destacado
     ax.scatter([2025], [casos_pred_2025], color="#C53030", s=140, marker="*", zorder=6, label=f"Proyección 2025: ~{round(casos_pred_2025)} casos")
     ax.annotate(f"Proyección 2025:\n{casos_pred_2025:.1f} casos", 
                 xy=(2025, casos_pred_2025), xytext=(2024.1, 445),
@@ -126,7 +125,7 @@ def run_regression_analysis():
                 fontsize=10, fontweight="bold", color="#9B2C2C",
                 bbox=dict(boxstyle="round,pad=0.4", fc="#FED7D7", ec="#E53E3E", lw=1.2))
 
-    # Rótulos en los puntos
+    # Rotulos en los puntos
     for _, row in df.iterrows():
         ax.annotate(f"{int(row['casos_mujeres'])}", (row["anio"], row["casos_mujeres"] + 10),
                     ha="center", fontsize=9, fontweight="bold", color="#2D3748")
@@ -142,7 +141,7 @@ def run_regression_analysis():
 
     fig.savefig(fig_path, dpi=300)
     plt.close()
-    print(f"\n[OK] Gráfico de regresión guardado exitosamente en: {fig_path}")
+    print(f"\n[OK] Grafico de regresion guardado exitosamente en: {fig_path}")
 
 if __name__ == "__main__":
     run_regression_analysis()

@@ -6,7 +6,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Conference](https://img.shields.io/badge/Congreso-Diciembre_2025-crimson.svg)](#contexto-del-congreso-y-autoría)
 
-> **Ponencia y Análisis Formal presentado en el:**  
+> **Investigación y Análisis Formal presentado en el:**  
 > **I Congreso Intersectorial sobre Violencia de Género y Mujeres en Situación de Vulnerabilidad**  
 > *Fecha:* 05 de diciembre de 2025 | Loja, Ecuador  
 > *Autor / Investigador:* **Pablo Andrés Japón Calva**  
@@ -15,7 +15,7 @@
 
 ## 📋 Resumen Ejecutivo
 
-Este repositorio alberga la infraestructura completa de análisis de datos, ingeniería de datos en la nube (SQL en Google BigQuery), scripts de modelado estadístico inferencial (Python y SPSS) y visualizaciones interactivas de la investigación presentada en el *I Congreso Intersectorial sobre Violencia de Género*.
+Este repositorio alberga la infraestructura completa de análisis de datos, ingeniería de datos en la nube (SQL en Google BigQuery) y modelos estadísticos inferenciales (Python y SPSS) desarrollados para la investigación presentada en el *I Congreso Intersectorial sobre Violencia de Género*.
 
 A partir de la consolidación de **más de 6 millones de registros de egresos hospitalarios** del **Instituto Nacional de Estadística y Censos (INEC)** entre **2019 y 2024**, este trabajo visibiliza la carga clínica de la violencia interpersonal en el sistema de salud ecuatoriano, identificando perfiles demográficos críticos y desarrollando un **modelo predictivo de regresión lineal para el año 2025**.
 
@@ -27,7 +27,7 @@ flowchart LR
     C --> E["Modelado Inferencial\n(SPSS + SciPy / Statsmodels)"]
     E --> F["Regresión Lineal Simple\nProyección 2025: ~429 casos"]
     E --> G["Pruebas Chi-Cuadrado\n(Edad p < 0.001 | Territorio p = 0.921)"]
-    F & G --> H["Presentación Interactiva\n(HTML5 + Chart.js)"]
+    F & G --> H["Visualizaciones de Alta Resolución\n(/figures)"]
 ```
 
 ---
@@ -66,11 +66,11 @@ Al filtrar la categoría **CIE-10 T74 (Síndromes del maltrato)** en el período
 
 | Proyección Predictiva 2025 (Regresión OLS) | Distribución de Vulnerabilidad Etaria (Chi² = 553.98) |
 | :---: | :---: |
-| ![Regresión Lineal 2025](presentation/figures/regresion_lineal_proyeccion_2025.png) | ![Distribución por Edad](presentation/figures/distribucion_etaria_mujeres_chi2.png) |
+| ![Regresión Lineal 2025](figures/regresion_lineal_proyeccion_2025.png) | ![Distribución por Edad](figures/distribucion_etaria_mujeres_chi2.png) |
 
 | Prevalencia Síndromes de Maltrato (T74) | Evolución Anual por Sexo ("Efecto Escalera") | Estabilidad Rural vs. Urbana (Chi² = 1.43, p = 0.921) |
 | :---: | :---: | :---: |
-| ![Prevalencia T74](presentation/figures/prevalencia_sindromes_maltrato_t74.png) | ![Brecha de Género](presentation/figures/brecha_genero_escalera_2019_2024.png) | ![Estabilidad Rural Urbana](presentation/figures/estabilidad_rural_urbana_chi2.png) |
+| ![Prevalencia T74](figures/prevalencia_sindromes_maltrato_t74.png) | ![Brecha de Género](figures/brecha_genero_escalera_2019_2024.png) | ![Estabilidad Rural Urbana](figures/estabilidad_rural_urbana_chi2.png) |
 
 ---
 
@@ -104,7 +104,7 @@ violencia_sexual_analisis_Ecuador/
 ├── src/                                # Código fuente de reproducción estadística en Python
 │   ├── linear_regression_forecast.py   # Regresión OLS, cálculo de intervalos y proyección 2025
 │   ├── inferential_tests.py            # Pruebas Chi-cuadrado (Bondad de ajuste e Independencia)
-│   └── plot_prevalence_and_trends.py   # Generación de gráficos en alta resolución (DPI=300)
+│   └── plot_prevalence_and_trends.py   # Generador de gráficos en alta resolución (DPI=300)
 │
 ├── notebooks/                          # Cuaderno de análisis interactivo
 │   └── 01_analisis_inferencial_y_predictivo.ipynb
@@ -120,10 +120,12 @@ violencia_sexual_analisis_Ecuador/
 │       ├── 05_casos_t742_mujeres_rural_urbano_2019_2024.csv
 │       └── 06_casos_t742_por_mes_2024.csv
 │
-├── presentation/                       # Materiales interactivos de la conferencia
-│   ├── index.html                      # Diapositivas web interactivas (Chart.js / GitHub Pages)
-│   ├── guion_conferencia.md            # Guion de oratoria íntegro presentado en el congreso
-│   └── figures/                        # Gráficos en formato PNG de alta resolución
+├── figures/                            # Gráficos en formato PNG de alta resolución (DPI=300)
+│   ├── prevalencia_sindromes_maltrato_t74.png
+│   ├── brecha_genero_escalera_2019_2024.png
+│   ├── regresion_lineal_proyeccion_2025.png
+│   ├── distribucion_etaria_mujeres_chi2.png
+│   └── estabilidad_rural_urbana_chi2.png
 │
 └── docs/                               # Documentación técnica y metodológica extendida
     ├── metodologia_investigacion.md    # Arquitectura en la nube y consideraciones éticas
@@ -163,8 +165,11 @@ python src/inferential_tests.py
 python src/plot_prevalence_and_trends.py
 ```
 
-### 4. Abrir la Presentación Interactiva
-Puedes abrir directamente en cualquier navegador el archivo `presentation/index.html` para navegar la presentación con gráficos dinámicos en Chart.js, o habilitar **GitHub Pages** apuntando a la carpeta `/presentation`.
+### 4. Explorar el Cuaderno Interactivo
+Puedes iniciar Jupyter Notebook para explorar interactivamente las pruebas y predicciones:
+```bash
+jupyter notebook notebooks/01_analisis_inferencial_y_predictivo.ipynb
+```
 
 ---
 

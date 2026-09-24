@@ -1,7 +1,7 @@
 cff-version: 1.2.0
-message: "If you use this research codebase, presentation, or datasets, please cite it as below."
+message: "If you use this research codebase, statistical models, or datasets, please cite it as below."
 title: "Rompiendo el silencio estadístico: Descifrando el patrón de violencia sexual contra niñas y adolescentes en Ecuador a través del análisis de datos"
-type: conference-presentation
+type: data
 authors:
   - family-names: "Japón Calva"
     given-names: "Pablo Andrés"
